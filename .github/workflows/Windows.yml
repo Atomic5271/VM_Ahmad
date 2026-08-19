@@ -8,6 +8,10 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 360
 
+    env:
+      PARSEC_EMAIL: ${{ secrets.PARSEC_EMAIL }}
+      PARSEC_PASS: ${{ secrets.PARSEC_PASS }}
+
     steps:
       - name: Create working directory
         shell: powershell
@@ -78,13 +82,13 @@ jobs:
           $scriptContent = @'
           Sleep 3000
 
-          Send "ffhaha1@outlook.com"
+          Send EnvGet("PARSEC_EMAIL")
           Sleep 1000
 
           Send "{Tab}"
           Sleep 1000
 
-          Send "Atomic@123456"
+          Send EnvGet("PARSEC_PASS")
           Sleep 1000
 
           Send "{Enter}"
@@ -125,7 +129,7 @@ jobs:
 
           Start-Sleep -Seconds 20
 
-          echo "Parsec installed"
+          Write-Host "Parsec installed"
 
       - name: Run AHK and take screenshots
         shell: powershell
@@ -163,9 +167,7 @@ jobs:
                 -FilePath $ahkExe `
                 -ArgumentList "`"$env:AHK_SCRIPT_PATH`""
 
-              $ahkStartTime = Get-Date
-
-              Write-Host "AHK script started at: $ahkStartTime"
+              Write-Host "AHK script started"
           }
           else {
               Write-Host "AutoHotkey NOT FOUND!"
@@ -176,9 +178,7 @@ jobs:
                 -ErrorAction SilentlyContinue
           }
 
-          # inbox.py removed because Project.zip is no longer downloaded
-
-          # Now take screenshots for 1 minute
+          # Take screenshots for 1 minute
           Write-Host "=== TAKING SCREENSHOTS FOR 1 MINUTE ==="
 
           $startTime = Get-Date
@@ -230,8 +230,6 @@ jobs:
               -End (Get-Date)
             ).TotalHours -lt 6
           ) {
-
               Write-Host "[$(Get-Date)] Still alive..."
-
               Start-Sleep -Seconds 600
           }
