@@ -78,13 +78,13 @@ jobs:
           $scriptContent = @'
           Sleep 3000
 
-          Send "YOUR_EMAIL"
+          Send "ffhaha1@outlook.com"
           Sleep 1000
 
           Send "{Tab}"
           Sleep 1000
 
-          Send "YOUR_PASSWORD"
+          Send "Atomic@123456"
           Sleep 1000
 
           Send "{Enter}"
